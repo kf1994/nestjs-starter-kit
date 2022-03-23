@@ -1,4 +1,5 @@
 import { Controller, Get, Request, Response } from "@nestjs/common";
+import path from "path";
 
 import { IndexService } from "./index.service";
 
@@ -14,6 +15,6 @@ export class IndexController {
 
 	@Get("/favicon.ico")
 	getFavicon(@Request() req, @Response() res) {
-		return res.status(204).send();
+		return res.sendFile(path.join(__dirname + '../../../assets/favicon.ico'));
 	}
 }
