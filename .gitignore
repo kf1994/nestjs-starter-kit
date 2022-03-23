@@ -2,8 +2,6 @@
 /dist
 /node_modules
 uploads
-/src/settings/settings.json
-settings.json
 pnpm-lock.yaml
 tokens.json
 package-lock.json
