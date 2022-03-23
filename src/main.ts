@@ -1,4 +1,3 @@
-import moment from "moment";
 import * as bodyParser from "body-parser";
 
 import { NestFactory } from "@nestjs/core";
