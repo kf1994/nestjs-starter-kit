@@ -16,10 +16,10 @@ export class TasksService {
 	public async find(): Promise<ITask[] | null> {
 		return await this.repo.find();
 	}
-	//
-	// public async findByID(id): Promise<Tasks | null> {
-	// 	return await this.repo.findOne(id);
-	// }
+
+	public async findByID(id: number): Promise<ITask | null> {
+		return await this.repo.findOne(id);
+	}
 
 	public async create(data: CreateTaskDto): Promise<ITask | null> {
 		const task =  this.repo.create(data);
