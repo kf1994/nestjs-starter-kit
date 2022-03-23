@@ -4,7 +4,7 @@ import * as bodyParser from "body-parser";
 import { NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import { logger } from "@core/logger/winston.js";
+import { logger } from "@core/logger/winston";
 
 import { AppModule } from "./app.module";
 
