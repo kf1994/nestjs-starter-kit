@@ -1,6 +1,6 @@
 const { join } = require("path");
 
-const winston = require("winston");
+const winston = require("core/logger/winston");
 require("winston-daily-rotate-file");
 
 const { printf } = winston.format;

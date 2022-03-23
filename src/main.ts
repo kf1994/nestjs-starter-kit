@@ -1,9 +1,12 @@
+import moment from "moment";
+import * as bodyParser from "body-parser";
+
 import { NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import * as bodyParser from "body-parser";
+import { logger } from "@core/logger/winston.js";
+
 import { AppModule } from "./app.module";
-import moment from "moment";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -14,7 +17,7 @@ async function bootstrap() {
 
 	app.use("/", (req, res, next) => {
 		req.startTime = new Date();
-		// logger.info(`${moment(req.startTime).format("DD-MM-YYYY hh:mm:ss")} | ${req.method} | ${req.url}`);
+		logger.info(`${moment(req.startTime).format("DD-MM-YYYY hh:mm:ss")} | ${req.method} | ${req.url}`);
 
 		next();
 	});
@@ -25,7 +28,7 @@ async function bootstrap() {
 			const responseTime = endTime.getTime() - req.startTime.getTime();
 			const startTime = moment(req.startTime).format("DD-MM-YYYY hh:mm:ss");
 
-			// logger.info(`${startTime} | ${req.method} | ${req.originalUrl} ${res.statusCode} ${responseTime}ms`);
+			logger.info(`${startTime} | ${req.method} | ${req.originalUrl} ${res.statusCode} ${responseTime}ms`);
 		});
 		next();
 	});
@@ -45,4 +48,4 @@ async function bootstrap() {
 	return `Server ${configService.get("app.name")} listening on ${configService.get("app.host")}:${configService.get("app.port")} IN ${configService.get("app.env")} mode`;
 }
 
-bootstrap().then(r => console.info(r));
+bootstrap().then(r => logger.info(r));
