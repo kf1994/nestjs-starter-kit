@@ -5,6 +5,8 @@ import "winston-daily-rotate-file";
 
 const { printf } = winston.format;
 const myFormat = printf(({ level, message, timestamp }) => {
+	const dt = new Date();
+	timestamp = dt.toLocaleString("en-PK");
 	return `${timestamp} ${level}: ${message}`;
 });
 

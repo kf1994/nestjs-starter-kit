@@ -17,7 +17,7 @@ async function bootstrap() {
 
 	app.use("/", (req, res, next) => {
 		req.startTime = new Date();
-		logger.info(`${moment(req.startTime).format("DD-MM-YYYY hh:mm:ss")} | ${req.method} | ${req.url}`);
+		logger.info(`| ${req.method} | ${req.url}`);
 
 		next();
 	});
@@ -26,9 +26,8 @@ async function bootstrap() {
 		res.on("finish", () => {
 			const endTime = new Date();
 			const responseTime = endTime.getTime() - req.startTime.getTime();
-			const startTime = moment(req.startTime).format("DD-MM-YYYY hh:mm:ss");
 
-			logger.info(`${startTime} | ${req.method} | ${req.originalUrl} ${res.statusCode} ${responseTime}ms`);
+			logger.info(`| ${req.method} | ${req.originalUrl} ${res.statusCode} ${responseTime}ms`);
 		});
 		next();
 	});
