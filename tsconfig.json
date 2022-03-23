@@ -5,16 +5,26 @@
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "resolveJsonModule": true,
-    // json imports
-    "esModuleInterop": true,
-    // import common modules as ES6 Modules
-    "allowSyntheticDefaultImports": true
-    // support typesystem compatibility
-  }
+    "paths": {
+      "@app/*": [
+        "src/*"
+      ],
+      "@config/*": [
+        "config/*"
+      ],
+      "@core/*": [
+        "core/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
