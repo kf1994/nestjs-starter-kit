@@ -13,9 +13,9 @@ export class TasksService {
 		@InjectRepository(Tasks) private readonly repo: Repository<Tasks>,
 	) {}
 
-	// public async find(): Promise<Tasks[] | null> {
-	// 	return await this.repo.find();
-	// }
+	public async find(): Promise<ITask[] | null> {
+		return await this.repo.find();
+	}
 	//
 	// public async findByID(id): Promise<Tasks | null> {
 	// 	return await this.repo.findOne(id);
