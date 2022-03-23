@@ -34,4 +34,12 @@ export class TasksService {
 
 		return "Successfully updated!";
 	}
+
+	public async delete(id: number): Promise<string> {
+		const result = await this.repo.delete(id);
+
+		if (!result?.affected) return "Unable to delete!";
+
+		return "Successfully deleted!";
+	}
 }
