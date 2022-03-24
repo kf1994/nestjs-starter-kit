@@ -1,15 +1,18 @@
 import * as bodyParser from "body-parser";
 
-import { NestFactory } from "@nestjs/core";
+import { HttpAdapterHost, NestFactory } from "@nestjs/core";
 import { ConfigService } from "@nestjs/config";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { logger } from "@core/logger/winston";
 
 import { AppModule } from "./app.module";
+import { ExceptionFilter } from "@core/exceptions";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 	app.enableCors();
+
+	const configService = app.get(ConfigService);
 
 	app.use(bodyParser.json({ limit: "50mb" }));
 	app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -31,7 +34,9 @@ async function bootstrap() {
 		next();
 	});
 
-	const configService = app.get(ConfigService);
+	// filters
+	const { httpAdapter } = app.get(HttpAdapterHost);
+	app.useGlobalFilters(new ExceptionFilter(httpAdapter));
 
 	if (configService.get("app.maintenance") === 1) {
 		app.use((req, res) =>
