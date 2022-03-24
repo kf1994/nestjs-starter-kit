@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { Tasks } from "./tasks.entity";
+import { Task } from "./tasks.entity";
 import { ITask } from "@app/tasks/interfaces/task.interface";
 import { CreateTaskDto } from "@app/tasks/dto/create-task.dto";
 import { UpdateTaskDto } from "@app/tasks/dto/update-task.dto";
@@ -11,7 +11,7 @@ import { UpdateTaskDto } from "@app/tasks/dto/update-task.dto";
 @Injectable()
 export class TasksService {
 	constructor(
-		@InjectRepository(Tasks) private readonly repo: Repository<Tasks>,
+		@InjectRepository(Task) private readonly repo: Repository<Task>,
 	) {}
 
 	public async find(): Promise<ITask[] | null> {

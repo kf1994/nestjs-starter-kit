@@ -1,7 +1,7 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Tasks {
+export class Task {
 	@PrimaryGeneratedColumn()
 	id: number;
 
