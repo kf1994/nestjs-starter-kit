@@ -22,12 +22,11 @@ export class ExceptionFilter extends BaseExceptionFilter {
     const response = ctx.getResponse<any>();
 
     if (exception instanceof ValidationFailed) {
-      return response.error(
+      return response.status(exception.getStatus()).send(
           {
             message: exception.message,
             errors: exception.getErrors(),
           },
-          exception.getStatus(),
       );
     }
 

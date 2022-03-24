@@ -7,6 +7,8 @@ import { logger } from "@core/logger/winston";
 
 import { AppModule } from "./app.module";
 import { ExceptionFilter } from "@core/exceptions";
+import { ValidationPipe } from "@nestjs/common";
+import validationOptions from "@core/utils/validation-options";
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,6 +39,8 @@ async function bootstrap() {
 	// filters
 	const { httpAdapter } = app.get(HttpAdapterHost);
 	app.useGlobalFilters(new ExceptionFilter(httpAdapter));
+
+	app.useGlobalPipes(new ValidationPipe(validationOptions));
 
 	if (configService.get("app.maintenance") === 1) {
 		app.use((req, res) =>
