@@ -1,6 +1,7 @@
 import { ArgumentsHost, Catch, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import { GenericException } from ".";
+import { Unauthorized } from "./Unauthorized";
 
 @Catch()
 export class ExceptionFilter extends BaseExceptionFilter {
@@ -8,6 +9,7 @@ export class ExceptionFilter extends BaseExceptionFilter {
     return [
       NotFoundException,
       GenericException,
+      Unauthorized,
       UnauthorizedException,
     ];
   }
