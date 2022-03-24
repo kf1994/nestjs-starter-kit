@@ -1,7 +1,7 @@
 import { ArgumentsHost, Catch, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import { GenericException, InvalidCredentials, ModelNotFoundException, ValidationFailed } from ".";
-import { Unauthorized } from "./Unauthorized";
+import { Unauthorized } from "./unauthorized";
 
 @Catch()
 export class ExceptionFilter extends BaseExceptionFilter {
