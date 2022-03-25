@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import * as crypto from "crypto";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
@@ -10,7 +10,6 @@ import { InvalidCredentials } from "@core/exceptions";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { ForgotService } from "@app/forgot/forgot.service";
 import moment from "moment";
-import has = Reflect.has;
 
 @Injectable()
 export class AuthService {
@@ -70,9 +69,9 @@ export class AuthService {
 		}
 
 		const hash = await this.forgotService.findOne({ where: { user: user.id } });
-		if (hash && moment().diff(moment(hash.createdAt), 'hours') <= 8) {
+		if (hash && moment().diff(moment(hash.createdAt), "hours") <= 8) {
 			return;
-		} else if (hash && moment().diff(moment(hash.createdAt), 'hours') > 8) {
+		} else if (hash && moment().diff(moment(hash.createdAt), "hours") > 8) {
 			await this.forgotService.softDelete(hash.id);
 		}
 
@@ -91,6 +90,15 @@ export class AuthService {
 
 		if (!forgot) {
 			throw new NotFoundException("Confirmation hash is not valid. Please make sure the confirmation hash is valid!");
+		}
+
+		if (moment().diff(moment(forgot.createdAt), "hours") > 8) {
+			throw new HttpException({
+					status: HttpStatus.BAD_REQUEST,
+					message: "This link has been expired.",
+				},
+				HttpStatus.BAD_REQUEST,
+			);
 		}
 
 		const user = forgot.user;
