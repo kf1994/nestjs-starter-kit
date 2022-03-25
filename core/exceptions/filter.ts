@@ -20,7 +20,6 @@ export class ExceptionFilter extends BaseExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<any>();
-
     if (exception instanceof ValidationFailed) {
       return response.status(exception.getStatus()).send(
           {
