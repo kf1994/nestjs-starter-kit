@@ -25,12 +25,16 @@ export class AuthController {
 	@Post('email/confirm')
 	@HttpCode(HttpStatus.OK)
 	async confirmEmail(@Body() body: AuthConfirmEmailDto) {
-		return this.service.confirmEmail(body.hash);
+		await this.service.confirmEmail(body.hash);
+
+		return { message: "Your email has been confirmed successfully." };
 	}
 
 	@Post('forgot/password')
 	@HttpCode(HttpStatus.OK)
 	async forgotPassword(@Body() body: AuthForgotPasswordDto) {
-		return this.service.forgotPassword(body.email);
+		await this.service.forgotPassword(body.email);
+
+		return { message: "Successfully sent reset link to user's email" };
 	}
 }

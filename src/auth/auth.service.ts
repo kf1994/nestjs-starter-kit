@@ -9,6 +9,8 @@ import { JwtService } from "@nestjs/jwt";
 import { InvalidCredentials } from "@core/exceptions";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { ForgotService } from "@app/forgot/forgot.service";
+import moment from "moment";
+import has = Reflect.has;
 
 @Injectable()
 export class AuthService {
@@ -67,12 +69,19 @@ export class AuthService {
 			throw new NotFoundException("User with this email does not exists!");
 		}
 
-		const hash = crypto
+		const hash = await this.forgotService.findOne({ where: { user: user.id } });
+		if (hash && moment().diff(moment(hash.createdAt), 'hours') <= 8) {
+			return;
+		} else if (hash && moment().diff(moment(hash.createdAt), 'hours') > 8) {
+			await this.forgotService.softDelete(hash.id);
+		}
+
+		const newHash = crypto
 			.createHash("sha256")
 			.update(randomStringGenerator())
 			.digest("hex");
 
-		await this.forgotService.create({ hash, user });
+		await this.forgotService.create({ hash: newHash, user });
 
 		// TODO: send email to user
 	}
