@@ -5,6 +5,7 @@ import { UsersModule } from "@app/users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ForgotModule } from "@app/forgot/forgot.module";
+import { JwtStrategy } from "@app/auth/strategies/jwt.strategy";
 
 @Module({
 	imports: [
@@ -14,15 +15,15 @@ import { ForgotModule } from "@app/forgot/forgot.module";
 			imports: [ConfigModule],
 			inject: [ConfigService],
 			useFactory: (configService: ConfigService) => ({
-				secret: configService.get('auth.secret'),
+				secret: configService.get("auth.secret"),
 				signOptions: {
-					expiresIn: configService.get('auth.expires'),
+					expiresIn: configService.get("auth.expires"),
 				},
 			}),
 		}),
 	],
 	controllers: [AuthController],
-	providers: [AuthService],
+	providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {
 }

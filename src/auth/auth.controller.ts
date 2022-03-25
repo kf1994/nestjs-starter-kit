@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nestjs/common";
 import { AuthService } from "@app/auth/auth.service";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { AuthConfirmEmailDto } from "@app/auth/dto/auth-confirm-email.dto";
 import { AuthForgotPasswordDto } from "@app/auth/dto/auth-forgot-password.dto";
 import { AuthResetPasswordDto } from "@app/auth/dto/auth-reset-password.dto";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("auth")
 export class AuthController {
@@ -17,13 +18,13 @@ export class AuthController {
 		return this.service.register(user);
 	}
 
-	@Post('login')
+	@Post("login")
 	@HttpCode(HttpStatus.OK)
 	public async login(@Body() creds: AuthLoginDto) {
 		return this.service.validateLogin(creds);
 	}
 
-	@Post('email/confirm')
+	@Post("email/confirm")
 	@HttpCode(HttpStatus.OK)
 	async confirmEmail(@Body() body: AuthConfirmEmailDto) {
 		await this.service.confirmEmail(body.hash);
@@ -31,7 +32,7 @@ export class AuthController {
 		return { message: "Your email has been confirmed successfully." };
 	}
 
-	@Post('forgot/password')
+	@Post("forgot/password")
 	@HttpCode(HttpStatus.OK)
 	async forgotPassword(@Body() body: AuthForgotPasswordDto) {
 		await this.service.forgotPassword(body.email);
@@ -39,12 +40,19 @@ export class AuthController {
 		return { message: "Successfully sent reset link to user's email" };
 	}
 
-	@Post('reset/password')
+	@Post("reset/password")
 	@HttpCode(HttpStatus.OK)
 	async resetPassword(@Body() body: AuthResetPasswordDto) {
-		const {hash, password} = body;
+		const { hash, password } = body;
 		await this.service.resetPassword(hash, password);
 
 		return { message: "Password changed successfully!" };
+	}
+
+	@Get("me")
+	@UseGuards(AuthGuard("jwt"))
+	@HttpCode(HttpStatus.OK)
+	public async me(@Request() request) {
+		return this.service.me(request.user);
 	}
 }
