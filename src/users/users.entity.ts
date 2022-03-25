@@ -10,9 +10,10 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { EntityHelper } from "@core/utils/entity-helper";
 
 @Entity()
-export class User {
+export class User extends EntityHelper {
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -43,6 +44,12 @@ export class User {
 
 	@Column({ nullable: true })
 	lastName: string | null;
+
+	@Column({ nullable: true })
+	hash: string | null;
+
+	@Column({ default: false })
+	emailVerified: boolean;
 
 	@CreateDateColumn()
 	createdAt: Date;

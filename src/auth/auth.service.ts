@@ -1,11 +1,13 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
+import * as crypto from "crypto";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { UsersService } from "@app/users/users.service";
 import { User } from "@app/users/users.entity";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { JwtService } from "@nestjs/jwt";
 import { InvalidCredentials } from "@core/exceptions";
+import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 
 @Injectable()
 export class AuthService {
@@ -16,7 +18,13 @@ export class AuthService {
 	}
 
 	async register(user: CreateUserDto): Promise<User> {
-		return await this.usersService.create(user);
+		const hash = crypto
+			.createHash("sha256")
+			.update(randomStringGenerator())
+			.digest("hex");
+
+		// TODO: Send hash to user via email
+		return await this.usersService.create({ ...user, hash });
 	}
 
 	async validateLogin(creds: AuthLoginDto): Promise<{ token: string; user: User }> {
@@ -35,5 +43,18 @@ export class AuthService {
 		} else {
 			throw new InvalidCredentials();
 		}
+	}
+
+	async confirmEmail(hash: string): Promise<void> {
+		const user= await this.usersService.findOne({ hash });
+
+		if (!user) {
+			throw new NotFoundException("Confirmation hash is not valid. Please make sure the confirmation hash is valid!");
+		}
+
+		user.hash = null;
+		user.emailVerified = true;
+
+		await user.save();
 	}
 }

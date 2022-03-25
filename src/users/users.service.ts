@@ -20,8 +20,6 @@ export class UsersService {
 	}
 
 	findOne(fields: EntityCondition<User>) {
-		return this.repo.findOne({
-			where: fields,
-		});
+		return this.repo.findOne({ where: fields });
 	}
 }

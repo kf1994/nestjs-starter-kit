@@ -18,4 +18,6 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   lastName: string;
+
+  hash?: string;
 }

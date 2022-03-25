@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
 import { AuthService } from "@app/auth/auth.service";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
+import { AuthConfirmEmailDto } from "@app/auth/dto/auth-confirm-email.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -18,5 +19,11 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	public async login(@Body() creds: AuthLoginDto) {
 		return this.service.validateLogin(creds);
+	}
+
+	@Post('email/confirm')
+	@HttpCode(HttpStatus.OK)
+	async confirmEmail(@Body() body: AuthConfirmEmailDto) {
+		return this.service.confirmEmail(body.hash);
 	}
 }
