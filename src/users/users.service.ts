@@ -22,4 +22,8 @@ export class UsersService {
 	findOne(fields: EntityCondition<User>) {
 		return this.repo.findOne({ where: fields });
 	}
+
+	async softDelete(id: number): Promise<void> {
+		await this.repo.softDelete(id);
+	}
 }

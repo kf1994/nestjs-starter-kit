@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nestjs/common";
 import { AuthService } from "@app/auth/auth.service";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
@@ -54,5 +54,14 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	public async me(@Request() request) {
 		return this.service.me(request.user);
+	}
+
+	@Delete("me")
+	@UseGuards(AuthGuard("jwt"))
+	@HttpCode(HttpStatus.OK)
+	public async delete(@Request() request) {
+		await this.service.softDelete(request.user);
+
+		return { message: "Your account has been deleted" };
 	}
 }

@@ -110,4 +110,8 @@ export class AuthService {
 	async me(user: User): Promise<User> {
 		return this.usersService.findOne({ id: user.id });
 	}
+
+	async softDelete(user: User): Promise<void> {
+		await this.usersService.softDelete(user.id);
+	}
 }
