@@ -6,10 +6,11 @@ import { UsersService } from "@app/users/users.service";
 import { User } from "@app/users/users.entity";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { JwtService } from "@nestjs/jwt";
-import { InvalidCredentials } from "@core/exceptions";
+import { InvalidCredentials, ValidationFailed } from "@core/exceptions";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
 import { ForgotService } from "@app/forgot/forgot.service";
 import moment from "moment";
+import { AuthUpdateDto } from "@app/auth/dto/auth-update.dto";
 
 @Injectable()
 export class AuthService {
@@ -108,6 +109,25 @@ export class AuthService {
 	}
 
 	async me(user: User): Promise<User> {
+		return this.usersService.findOne({ id: user.id });
+	}
+
+	async update(user: User, userDto: AuthUpdateDto): Promise<User> {
+		if (userDto.password) {
+			if (userDto.oldPassword) {
+				const currentUser = await this.usersService.findOne({ id: user.id });
+
+				const isValidOldPassword = await bcrypt.compare(userDto.oldPassword, currentUser.password);
+
+				if (!isValidOldPassword) throw new InvalidCredentials();
+
+			} else {
+				throw new ValidationFailed({ oldPassword: "Previous password field is missing!" });
+			}
+		}
+
+		await this.usersService.update(user.id, userDto);
+
 		return this.usersService.findOne({ id: user.id });
 	}
 

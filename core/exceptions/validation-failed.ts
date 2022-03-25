@@ -1,12 +1,10 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class ValidationFailed extends HttpException {
-  private errors: Record<string, any>;
+  private readonly errors: Record<string, any>;
+
   constructor(errors: Record<string, any>) {
-    super(
-      'Some entities failed, please check',
-      HttpStatus.UNPROCESSABLE_ENTITY,
-    );
+    super("Some entities failed, please check", HttpStatus.UNPROCESSABLE_ENTITY);
 
     this.errors = errors;
   }

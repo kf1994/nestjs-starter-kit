@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Patch, Post, Request, UseGuards } from "@nestjs/common";
 import { AuthService } from "@app/auth/auth.service";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
@@ -6,6 +6,7 @@ import { AuthConfirmEmailDto } from "@app/auth/dto/auth-confirm-email.dto";
 import { AuthForgotPasswordDto } from "@app/auth/dto/auth-forgot-password.dto";
 import { AuthResetPasswordDto } from "@app/auth/dto/auth-reset-password.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { AuthUpdateDto } from "@app/auth/dto/auth-update.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -54,6 +55,13 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	public async me(@Request() request) {
 		return this.service.me(request.user);
+	}
+
+	@Patch('me')
+	@UseGuards(AuthGuard('jwt'))
+	@HttpCode(HttpStatus.OK)
+	public async update(@Request() request, @Body() userDto: AuthUpdateDto) {
+		return this.service.update(request.user, userDto);
 	}
 
 	@Delete("me")
