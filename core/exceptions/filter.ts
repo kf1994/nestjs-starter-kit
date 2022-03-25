@@ -2,6 +2,7 @@ import { ArgumentsHost, Catch, NotFoundException, UnauthorizedException } from "
 import { BaseExceptionFilter } from "@nestjs/core";
 import { GenericException, InvalidCredentials, ModelNotFoundException, ValidationFailed } from ".";
 import { Unauthorized } from "./unauthorized";
+import { logger } from "@core/logger/winston";
 
 @Catch()
 export class ExceptionFilter extends BaseExceptionFilter {
@@ -20,7 +21,9 @@ export class ExceptionFilter extends BaseExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<any>();
-    console.log(exception);
+
+    logger.error(exception);
+
     if (exception instanceof ValidationFailed) {
       return response.status(exception.getStatus()).send(
           {
