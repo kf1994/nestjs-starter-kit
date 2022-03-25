@@ -85,4 +85,17 @@ export class AuthService {
 
 		// TODO: send email to user
 	}
+
+	async resetPassword(hash: string, password: string): Promise<void> {
+		const forgot = await this.forgotService.findOne({ where: { hash } });
+
+		if (!forgot) {
+			throw new NotFoundException("Confirmation hash is not valid. Please make sure the confirmation hash is valid!");
+		}
+
+		const user = forgot.user;
+		user.password = password;
+		await user.save();
+		await this.forgotService.softDelete(forgot.id);
+	}
 }

@@ -4,6 +4,7 @@ import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { AuthConfirmEmailDto } from "@app/auth/dto/auth-confirm-email.dto";
 import { AuthForgotPasswordDto } from "@app/auth/dto/auth-forgot-password.dto";
+import { AuthResetPasswordDto } from "@app/auth/dto/auth-reset-password.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -36,5 +37,14 @@ export class AuthController {
 		await this.service.forgotPassword(body.email);
 
 		return { message: "Successfully sent reset link to user's email" };
+	}
+
+	@Post('reset/password')
+	@HttpCode(HttpStatus.OK)
+	async resetPassword(@Body() body: AuthResetPasswordDto) {
+		const {hash, password} = body;
+		await this.service.resetPassword(hash, password);
+
+		return { message: "Password changed successfully!" };
 	}
 }
