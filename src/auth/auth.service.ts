@@ -8,12 +8,14 @@ import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { JwtService } from "@nestjs/jwt";
 import { InvalidCredentials } from "@core/exceptions";
 import { randomStringGenerator } from "@nestjs/common/utils/random-string-generator.util";
+import { ForgotService } from "@app/forgot/forgot.service";
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private jwtService: JwtService,
 		private usersService: UsersService,
+		private forgotService: ForgotService,
 	) {
 	}
 
@@ -46,7 +48,7 @@ export class AuthService {
 	}
 
 	async confirmEmail(hash: string): Promise<void> {
-		const user= await this.usersService.findOne({ hash });
+		const user = await this.usersService.findOne({ hash });
 
 		if (!user) {
 			throw new NotFoundException("Confirmation hash is not valid. Please make sure the confirmation hash is valid!");
@@ -56,5 +58,22 @@ export class AuthService {
 		user.emailVerified = true;
 
 		await user.save();
+	}
+
+	async forgotPassword(email: string): Promise<void> {
+		const user = await this.usersService.findOne({ email });
+
+		if (!user) {
+			throw new NotFoundException("User with this email does not exists!");
+		}
+
+		const hash = crypto
+			.createHash("sha256")
+			.update(randomStringGenerator())
+			.digest("hex");
+
+		await this.forgotService.create({ hash, user });
+
+		// TODO: send email to user
 	}
 }

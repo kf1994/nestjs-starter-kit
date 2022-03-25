@@ -3,6 +3,7 @@ import { AuthService } from "@app/auth/auth.service";
 import { CreateUserDto } from "@app/users/dto/create-user.dto";
 import { AuthLoginDto } from "@app/auth/dto/auth-email-login.dto";
 import { AuthConfirmEmailDto } from "@app/auth/dto/auth-confirm-email.dto";
+import { AuthForgotPasswordDto } from "@app/auth/dto/auth-forgot-password.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -25,5 +26,11 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	async confirmEmail(@Body() body: AuthConfirmEmailDto) {
 		return this.service.confirmEmail(body.hash);
+	}
+
+	@Post('forgot/password')
+	@HttpCode(HttpStatus.OK)
+	async forgotPassword(@Body() body: AuthForgotPasswordDto) {
+		return this.service.forgotPassword(body.email);
 	}
 }
