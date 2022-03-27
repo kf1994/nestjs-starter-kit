@@ -65,9 +65,7 @@ export class AuthService {
 	async forgotPassword(email: string): Promise<void> {
 		const user = await this.usersService.findOne({ email });
 
-		if (!user) {
-			throw new NotFoundException("User with this email does not exists!");
-		}
+		if (!user) throw new NotFoundException("User with this email does not exists!");
 
 		const hash = await this.forgotService.findOne({ where: { user: user.id } });
 		if (hash && moment().diff(moment(hash.createdAt), "hours") <= 8) {
