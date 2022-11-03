@@ -6,8 +6,7 @@ import { UpdateTaskDto } from "@app/tasks/dto/update-task.dto";
 
 @Controller("tasks")
 export class TasksController {
-	constructor(private service: TasksService) {
-	}
+	constructor(private service: TasksService) {}
 
 	@Post()
 	async create(@Body() task: CreateTaskDto): Promise<ITask | null> {

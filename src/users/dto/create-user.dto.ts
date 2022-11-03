@@ -3,21 +3,21 @@ import { Transform } from "class-transformer";
 import { IsNotExist } from "@core/validators/is-not-exists.validator";
 
 export class CreateUserDto {
-  @Transform(({ value }) => value.toLowerCase().trim())
-  @Validate(IsNotExist, ["User"], {
-    message: "Email already exists!",
-  })
-  @IsEmail()
-  email: string;
+	@Transform(({ value }) => value.toLowerCase().trim())
+	@Validate(IsNotExist, ["User"], {
+		message: "Email already exists!",
+	})
+	@IsEmail()
+	email: string;
 
-  @MinLength(6)
-  password: string;
+	@MinLength(6)
+	password: string;
 
-  @IsNotEmpty()
-  firstName: string;
+	@IsNotEmpty()
+	firstName: string;
 
-  @IsNotEmpty()
-  lastName: string;
+	@IsNotEmpty()
+	lastName: string;
 
-  hash?: string;
+	hash?: string;
 }

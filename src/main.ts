@@ -45,14 +45,17 @@ async function bootstrap() {
 	if (configService.get("app.maintenance") === 1) {
 		app.use((req, res) =>
 			res.status(503).send({
-				message: "Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!",
+				message:
+					"Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!",
 			}),
 		);
 	}
 
 	await app.listen(configService.get("app.port"));
 
-	return `Server ${configService.get("app.name")} listening on ${configService.get("app.host")}:${configService.get("app.port")} IN ${configService.get("app.env")} mode`;
+	return `Server ${configService.get("app.name")} listening on ${configService.get("app.host")}:${configService.get(
+		"app.port",
+	)} IN ${configService.get("app.env")} mode`;
 }
 
 bootstrap().then(r => logger.info(r));

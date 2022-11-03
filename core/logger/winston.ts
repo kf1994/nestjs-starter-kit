@@ -37,10 +37,10 @@ const applicationTransportConsole = new winston.transports.Console({
 	format: winston.format.combine(winston.format.colorize(), myFormat),
 });
 
-applicationTransport.on("rotate", function (oldFilename, newFilename) {
+applicationTransport.on("rotate", function(oldFilename, newFilename) {
 	logger.info("Rotating Info Logger File. from", oldFilename, "to", newFilename);
 });
-errorTransport.on("rotate", function (oldFilename, newFilename) {
+errorTransport.on("rotate", function(oldFilename, newFilename) {
 	logger.info("Rotating Error Logger File. from", oldFilename, "to", newFilename);
 });
 

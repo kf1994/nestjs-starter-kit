@@ -7,6 +7,4 @@ import { IndexService } from "@app/index/index.service";
 	controllers: [IndexController],
 	providers: [IndexService],
 })
-
-export class IndexModule {
-}
+export class IndexModule {}

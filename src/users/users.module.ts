@@ -9,5 +9,4 @@ import { UsersService } from "@app/users/users.service";
 	exports: [UsersService],
 	providers: [UsersService],
 })
-export class UsersModule {
-}
+export class UsersModule {}

@@ -5,8 +5,7 @@ import { IndexService } from "./index.service";
 
 @Controller()
 export class IndexController {
-	constructor(private readonly service: IndexService) {
-	}
+	constructor(private readonly service: IndexService) {}
 
 	@Get()
 	getHello(): string {
@@ -15,6 +14,6 @@ export class IndexController {
 
 	@Get("/favicon.ico")
 	getFavicon(@Request() req, @Response() res) {
-		return res.sendFile(path.join(__dirname + '../../../assets/favicon.ico'));
+		return res.sendFile(path.join(__dirname + "../../../assets/favicon.ico"));
 	}
 }

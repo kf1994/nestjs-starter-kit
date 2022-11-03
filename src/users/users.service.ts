@@ -11,13 +11,10 @@ export class UsersService {
 	constructor(
 		@InjectRepository(User)
 		private repo: Repository<User>,
-	) {
-	}
+	) {}
 
 	async create(user: CreateUserDto) {
-		return await this.repo.save(
-			this.repo.create(user),
-		);
+		return await this.repo.save(this.repo.create(user));
 	}
 
 	findOne(fields: EntityCondition<User>) {

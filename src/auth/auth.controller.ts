@@ -10,8 +10,7 @@ import { AuthUpdateDto } from "@app/auth/dto/auth-update.dto";
 
 @Controller("auth")
 export class AuthController {
-	constructor(public service: AuthService) {
-	}
+	constructor(public service: AuthService) {}
 
 	@Post("register")
 	@HttpCode(HttpStatus.CREATED)
@@ -57,8 +56,8 @@ export class AuthController {
 		return this.service.me(request.user);
 	}
 
-	@Patch('me')
-	@UseGuards(AuthGuard('jwt'))
+	@Patch("me")
+	@UseGuards(AuthGuard("jwt"))
 	@HttpCode(HttpStatus.OK)
 	public async update(@Request() request, @Body() userDto: AuthUpdateDto) {
 		return this.service.update(request.user, userDto);

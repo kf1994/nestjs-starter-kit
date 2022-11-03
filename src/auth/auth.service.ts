@@ -11,6 +11,8 @@ import { randomStringGenerator } from "@nestjs/common/utils/random-string-genera
 import { ForgotService } from "@app/forgot/forgot.service";
 import moment from "moment";
 import { AuthUpdateDto } from "@app/auth/dto/auth-update.dto";
+import { FindOneOptions } from "typeorm/find-options/FindOneOptions";
+import { Forgot } from "@app/forgot/forgot.entity";
 
 @Injectable()
 export class AuthService {
@@ -18,14 +20,10 @@ export class AuthService {
 		private jwtService: JwtService,
 		private usersService: UsersService,
 		private forgotService: ForgotService,
-	) {
-	}
+	) {}
 
 	async register(user: CreateUserDto): Promise<User> {
-		const hash = crypto
-			.createHash("sha256")
-			.update(randomStringGenerator())
-			.digest("hex");
+		const hash = crypto.createHash("sha256").update(randomStringGenerator()).digest("hex");
 
 		// TODO: Send hash to user via email
 		return await this.usersService.create({ ...user, hash });
@@ -36,13 +34,10 @@ export class AuthService {
 			email: creds.email,
 		});
 
-		const isValidPassword = await bcrypt.compare(
-			creds.password,
-			user.password,
-		);
+		const isValidPassword = await bcrypt.compare(creds.password, user.password);
 
 		if (isValidPassword) {
-			const token = await this.jwtService.sign({ id: user.id });
+			const token = this.jwtService.sign({ id: user.id });
 			return { token, user: user };
 		} else {
 			throw new InvalidCredentials();
@@ -67,17 +62,14 @@ export class AuthService {
 
 		if (!user) throw new NotFoundException("User with this email does not exists!");
 
-		const hash = await this.forgotService.findOne({ where: { user: user.id } });
+		const hash = await this.forgotService.findOne({ where: { user: user.id } } as FindOneOptions<Forgot>);
 		if (hash && moment().diff(moment(hash.createdAt), "hours") <= 8) {
 			return;
 		} else if (hash && moment().diff(moment(hash.createdAt), "hours") > 8) {
 			await this.forgotService.softDelete(hash.id);
 		}
 
-		const newHash = crypto
-			.createHash("sha256")
-			.update(randomStringGenerator())
-			.digest("hex");
+		const newHash = crypto.createHash("sha256").update(randomStringGenerator()).digest("hex");
 
 		await this.forgotService.create({ hash: newHash, user });
 
@@ -92,7 +84,8 @@ export class AuthService {
 		}
 
 		if (moment().diff(moment(forgot.createdAt), "hours") > 8) {
-			throw new HttpException({
+			throw new HttpException(
+				{
 					status: HttpStatus.BAD_REQUEST,
 					message: "This link has been expired.",
 				},
@@ -118,7 +111,6 @@ export class AuthService {
 				const isValidOldPassword = await bcrypt.compare(userDto.oldPassword, currentUser.password);
 
 				if (!isValidOldPassword) throw new InvalidCredentials();
-
 			} else {
 				throw new ValidationFailed({ oldPassword: "Previous password field is missing!" });
 			}
