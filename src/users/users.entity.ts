@@ -10,13 +10,10 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 import * as bcrypt from "bcrypt";
-import { EntityHelper } from "@core/utils/entity-helper";
+import { BaseEntity } from "@core/utils/base-entity";
 
 @Entity()
-export class User extends EntityHelper {
-	@PrimaryGeneratedColumn()
-	id: number;
-
+export class User extends BaseEntity {
 	@Column({ unique: true })
 	email: string;
 
