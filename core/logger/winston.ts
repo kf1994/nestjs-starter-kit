@@ -4,6 +4,7 @@ const winston = require("winston");
 import "winston-daily-rotate-file";
 
 const { printf } = winston.format;
+
 const myFormat = printf(({ level, message, timestamp }) => {
 	const dt = new Date();
 	timestamp = dt.toLocaleString("en-PK");
@@ -19,6 +20,7 @@ const applicationTransport = new winston.transports.DailyRotateFile({
 	level: "info",
 	format: myFormat,
 });
+
 const errorTransport = new winston.transports.DailyRotateFile({
 	filename: join(__dirname, "logs", "error-%DATE%.log"),
 	datePattern: "YYYY-MM-DD",
@@ -28,10 +30,12 @@ const errorTransport = new winston.transports.DailyRotateFile({
 	level: "error",
 	format: myFormat,
 });
+
 const errorTransportConsole = new winston.transports.Console({
 	level: "error",
 	format: winston.format.combine(winston.format.colorize(), myFormat),
 });
+
 const applicationTransportConsole = new winston.transports.Console({
 	level: "info",
 	format: winston.format.combine(winston.format.colorize(), myFormat),
@@ -40,6 +44,7 @@ const applicationTransportConsole = new winston.transports.Console({
 applicationTransport.on("rotate", function(oldFilename, newFilename) {
 	logger.info("Rotating Info Logger File. from", oldFilename, "to", newFilename);
 });
+
 errorTransport.on("rotate", function(oldFilename, newFilename) {
 	logger.info("Rotating Error Logger File. from", oldFilename, "to", newFilename);
 });
