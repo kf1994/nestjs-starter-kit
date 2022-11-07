@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class IndexService {
-	getHello(): string {
-		return "NestJS Backend Boiler Plate";
-	}
+  getHello(): string {
+    return 'NestJS Backend Boiler Plate';
+  }
 }
