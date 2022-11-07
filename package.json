@@ -20,12 +20,12 @@
     "migration:revert": "yarn ts-typeorm migration:revert"
   },
   "dependencies": {
-    "@nestjs/common": "^9.1.6",
+    "@nestjs/common": "^9.0.1",
     "@nestjs/config": "^2.2.0",
-    "@nestjs/core": "^9.1.6",
+    "@nestjs/core": "^9.0.1",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
-    "@nestjs/platform-express": "^9.1.6",
+    "@nestjs/platform-express": "^9.0.1",
     "@nestjs/serve-static": "^3.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "@types/bcrypt": "^5.0.0",
@@ -47,7 +47,9 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
+    "rxjs": "^7.5.7",
     "typeorm": "^0.3.10",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
