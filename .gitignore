@@ -3,7 +3,6 @@
 /node_modules
 uploads
 pnpm-lock.yaml
-tokens.json
 package-lock.json
 .env
 
@@ -38,3 +37,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 yarn.lock
+/coverage
