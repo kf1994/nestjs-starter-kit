@@ -20,12 +20,12 @@
     "migration:revert": "yarn ts-typeorm migration:revert"
   },
   "dependencies": {
-    "@nestjs/common": "^9.0.1",
+    "@nestjs/common": "^9.1.6",
     "@nestjs/config": "^2.2.0",
-    "@nestjs/core": "^9.0.1",
+    "@nestjs/core": "^9.1.6",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
-    "@nestjs/platform-express": "^9.0.1",
+    "@nestjs/platform-express": "^9.1.6",
     "@nestjs/serve-static": "^3.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "@types/bcrypt": "^5.0.0",
