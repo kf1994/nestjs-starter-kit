@@ -8,7 +8,7 @@ import { AppModule } from './app.module';
 import { ExceptionFilter } from '@core/exceptions';
 import { ValidationPipe } from '@nestjs/common';
 import validationOptions from '@core/utils/validation-options';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -24,6 +24,10 @@ async function bootstrap() {
    * Swagger Setup
    */
   if (['testing', 'development'].includes(environment)) {
+    const customOptions: SwaggerCustomOptions = {
+      customSiteTitle: 'NestJS Starter Kit API Docs',
+      customfavIcon: '/favicon.ico',
+    };
     const options = new DocumentBuilder()
       .setTitle('NestJS Starter Kit')
       .setDescription(
@@ -32,7 +36,7 @@ async function bootstrap() {
       .setVersion('1.0')
       .build();
     const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('/api/docs', app, document);
+    SwaggerModule.setup('/api/docs', app, document, customOptions);
   }
 
   app.use('/', (req, res, next) => {
