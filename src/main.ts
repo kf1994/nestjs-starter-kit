@@ -8,15 +8,32 @@ import { AppModule } from './app.module';
 import { ExceptionFilter } from '@core/exceptions';
 import { ValidationPipe } from '@nestjs/common';
 import validationOptions from '@core/utils/validation-options';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
 
   const configService = app.get(ConfigService);
+  const environment = configService.get('app.env');
 
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+  /**
+   * Swagger Setup
+   */
+  if (['testing', 'development'].includes(environment)) {
+    const options = new DocumentBuilder()
+      .setTitle('NestJS Starter Kit')
+      .setDescription(
+        'The goal of this project is to provide a clean and up-to-date "starter pack" for REST API projects that are built with NestJS.',
+      )
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('/api/docs', app, document);
+  }
 
   app.use('/', (req, res, next) => {
     req.startTime = new Date();
@@ -53,7 +70,7 @@ async function bootstrap() {
 
   return `Server ${configService.get('app.name')} listening on ${configService.get('app.host')}:${configService.get(
     'app.port',
-  )} IN ${configService.get('app.env')} mode`;
+  )} IN ${environment} environment`;
 }
 
 bootstrap().then((r) => logger.info(r));
