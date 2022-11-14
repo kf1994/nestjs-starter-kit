@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '@core/utils/base.entity';
 import { CreateTaskDto } from '@app/tasks/dto/create-task.dto';
-import { ITask } from '@app/tasks/interfaces/task.interface';
+import { ITask } from './dto/task.dto';
 
 @Entity()
 export class Task extends BaseEntity {
